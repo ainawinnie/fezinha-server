@@ -1,8 +1,10 @@
 from typing import Optional
 from uuid import UUID
 
+from pymysql import IntegrityError
 from pymysql.connections import Connection
 
+from fezinha_server.entities.exceptions.duplicate_entity_exception import DuplicateEntityException
 from fezinha_server.entities.user import User
 from fezinha_server.repositories import user_queries
 
@@ -17,16 +19,22 @@ class UserRepository:
         dto = UserRepository.__convert_user_to_dto(user)
 
         cursor = self.connection.cursor()
-        cursor.execute(query, dto)
-        self.connection.commit()
+        try:
+            cursor.execute(query, dto)
+            self.connection.commit()
+        except IntegrityError as ex:
+            UserRepository.__handle_integrity_error(ex, user.login)
 
     def update_user(self, user: User):
         query = user_queries.UPDATE_USER
         dto = UserRepository.__convert_user_to_dto(user)
 
         cursor = self.connection.cursor()
-        cursor.execute(query, dto)
-        self.connection.commit()
+        try:
+            cursor.execute(query, dto)
+            self.connection.commit()
+        except IntegrityError as ex:
+            UserRepository.__handle_integrity_error(ex, "user")
 
     def delete_user(self, user_id: UUID):
         query = user_queries.DELETE_USER
@@ -35,13 +43,28 @@ class UserRepository:
         cursor.execute(query, {"id": str(user_id)})
         self.connection.commit()
 
-    def get_user_by_id(self, user_id: UUID) -> Optional[User]:
+    def find_user_by_id(self, user_id: UUID) -> Optional[User]:
         query = user_queries.SELECT_USER
 
         cursor = self.connection.cursor()
         cursor.execute(query, {"id": str(user_id)})
 
         return UserRepository.__convert_cursor_tuple_to_user(cursor.fetchone())
+
+    def find_user_by_login(self, login: str) -> Optional[User]:
+        query = user_queries.SELECT_USER_LOGIN
+
+        cursor = self.connection.cursor()
+        cursor.execute(query, {"login": login})
+
+        return UserRepository.__convert_cursor_tuple_to_user(cursor.fetchone())
+
+    @staticmethod
+    def __handle_integrity_error(exception: IntegrityError, identifier: str):
+        if "UNIQUE" not in exception.args[1] and "Duplicate" not in exception.args[1]:
+            raise exception
+
+        raise DuplicateEntityException("user", identifier)
 
     @staticmethod
     def __convert_cursor_tuple_to_user(cursor_user: tuple) -> Optional[User]:
