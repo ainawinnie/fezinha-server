@@ -9,17 +9,17 @@ from fezinha_server.entities.user import User
 from fezinha_server.repositories import user_queries
 
 
-class UserRepository:
+class UserRepository: #Pq é necessário usar class?
 
-    def __init__(self, connection: Connection):
+    def __init__(self, connection: Connection): #O que é __init__? Pq usar self? O que é Connection?
         self.connection = connection
 
     def create_user(self, user: User):
-        query = user_queries.INSERT_USER
-        dto = UserRepository.__convert_user_to_dto(user)
+        query = user_queries.INSERT_USER #Sempre usar "query" como variável para as queries?
+        dto = UserRepository.__convert_user_to_dto(user) #Significado de dto?
 
-        cursor = self.connection.cursor()
-        try:
+        cursor = self.connection.cursor() #O que é cursor?
+        try: #Pq usar try?
             cursor.execute(query, dto)
             self.connection.commit()
         except IntegrityError as ex:
