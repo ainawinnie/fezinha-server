@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from uuid import UUID
 
 
-@dataclass
+@dataclass #Para que serve o dataclass mesmo?
 class User:
     id: UUID
     name: str
