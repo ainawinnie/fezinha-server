@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 from uuid import UUID
 
@@ -7,3 +8,8 @@ def str_to_uuid(str_uuid: str) -> Optional[UUID]:
         return None
 
     return UUID(str_uuid)
+
+
+def get_root_dir() -> str:
+    path = os.getcwd()
+    return path.split("fezinha-server")[0] + "fezinha-server/"

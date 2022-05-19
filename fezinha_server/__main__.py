@@ -9,10 +9,10 @@ from fezinha_server import config, register_controllers
 from fezinha_server.dependency_injector import DependencyInjector
 from fezinha_server.security import authentication_utils
 
-db_connection = pymysql.connect(host=config.DB_HOST, port=config.DB_PORT, user=config.DB_USERNAME,
-                                password=config.DB_PASSWORD, database=config.DB_DATABASE)
+__db_connection = pymysql.connect(host=config.DB_HOST, port=config.DB_PORT, user=config.DB_USERNAME,
+                                  password=config.DB_PASSWORD, database=config.DB_DATABASE)
 
-dependency_injector = Injector([DependencyInjector(db_connection)])
+dependency_injector = Injector([DependencyInjector(__db_connection)])
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config.ENCRYPT_SECRET_KEY

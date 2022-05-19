@@ -8,3 +8,6 @@ class User:
     name: str
     login: str
     password: str
+
+    def __eq__(self, other):
+        return isinstance(other, User) and self.id == other.id
