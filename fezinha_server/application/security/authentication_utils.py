@@ -1,12 +1,10 @@
-from functools import wraps
-
-from flask import Flask, current_app
-from flask_jwt import JWT, JWTError, _jwt_required
+from flask import Flask
+from flask_jwt import JWT, JWTError
 from injector import Injector
 
 from fezinha_server.entities.exceptions.invalid_credentials_exception import InvalidCredentialsException
 from fezinha_server.repositories.user_repository import UserRepository
-from fezinha_server.security.auth_user import AuthUser
+from fezinha_server.application.security.auth_user import AuthUser
 from fezinha_server.services.authentication_service import AuthenticationService
 from fezinha_server.utils import utils
 

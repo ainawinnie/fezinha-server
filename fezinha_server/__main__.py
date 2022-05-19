@@ -5,9 +5,10 @@ from flask import Flask
 from flask_injector import FlaskInjector
 from injector import Injector
 
-from fezinha_server import config, register_controllers
+from fezinha_server import config
+from fezinha_server.application.controller import register_controllers
 from fezinha_server.dependency_injector import DependencyInjector
-from fezinha_server.security import authentication_utils
+from fezinha_server.application.security import authentication_utils
 
 __db_connection = pymysql.connect(host=config.DB_HOST, port=config.DB_PORT, user=config.DB_USERNAME,
                                   password=config.DB_PASSWORD, database=config.DB_DATABASE)
