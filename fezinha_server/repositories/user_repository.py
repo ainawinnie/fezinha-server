@@ -61,7 +61,7 @@ class UserRepository:
 
     @staticmethod
     def __handle_integrity_error(exception: IntegrityError, identifier: str):
-        if "UNIQUE" not in exception.args[1] and "Duplicate" not in exception.args[1]:
+        if len(exception.args) > 1 and "UNIQUE" not in exception.args[1] and "Duplicate" not in exception.args[1]:
             raise exception
 
         raise DuplicateEntityException("user", identifier)

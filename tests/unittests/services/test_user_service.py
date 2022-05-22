@@ -1,5 +1,4 @@
 import unittest
-import uuid
 from unittest.mock import Mock
 
 from fezinha_server.entities.exceptions.invalid_parameter_exception import InvalidParameterException

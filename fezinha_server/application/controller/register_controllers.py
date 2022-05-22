@@ -1,6 +1,6 @@
 from flask import Flask
 
-from fezinha_server.controller import user_controller
+from fezinha_server.application.controller import user_controller
 
 
 def register_controllers(app: Flask):
